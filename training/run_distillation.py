@@ -1641,7 +1641,8 @@ def main():
                     feature_extractor.save_pretrained(intermediate_dir)
                     tokenizer.save_pretrained(intermediate_dir)
                     config.save_pretrained(intermediate_dir)
-                    student_model.generation_config.save_pretrained(intermediate_dir)
+                    unwraped_model = accelerator.unwrap_model(student_model)
+                    unwraped_model.generation_config.save_pretrained(intermediate_dir)
 
                     accelerator.wait_for_everyone()
                     if accelerator.is_main_process:
