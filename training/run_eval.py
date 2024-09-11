@@ -519,6 +519,7 @@ def main():
             cache_dir=data_args.dataset_cache_dir,
             streaming=data_args.streaming,
             num_proc=data_args.preprocessing_num_workers,
+            trust_remote_code=True
         )
         
         if data_args.only_short_form:
