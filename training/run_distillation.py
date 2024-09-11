@@ -1700,8 +1700,12 @@ def main():
 
                         eval_time = time.time() - eval_start
                         # normalize eval metrics
+                        # eval_metrics = {
+                        #     key: torch.mean(torch.stack([d[key] for d in eval_metrics])) for key in eval_metrics[0]
+                        # }
                         eval_metrics = {
-                            key: torch.mean(torch.stack([d[key] for d in eval_metrics])) for key in eval_metrics[0]
+                            key: torch.mean(torch.cat([d[key].float() for d in eval_metrics], dim=0), dim=0)
+                            for key in eval_metrics[0]
                         }
 
                         # compute WER metric
