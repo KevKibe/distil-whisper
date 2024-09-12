@@ -613,7 +613,7 @@ def main():
     # 7. Preprocessing the datasets.
     # We need to read the audio files as arrays and tokenize the targets.
     audio_column_name = data_args.audio_column_name
-    language = language_to_id(data_args.language, model.generation_config) if data_args.language else None
+    language = language_to_id(data_args.language, model.module.generation_config) if data_args.language else None
     if language is None or language == "<|en|>":
         normalizer = EnglishTextNormalizer(processor.tokenizer.english_spelling_normalizer)
     else:
@@ -699,7 +699,7 @@ def main():
         "top_k": 0,
     }
 
-    if hasattr(model.generation_config, "is_multilingual") and model.generation_config.is_multilingual:
+    if hasattr(model.module.generation_config, "is_multilingual") and model.module.generation_config.is_multilingual:
         gen_kwargs["language"] = data_args.language
         gen_kwargs["task"] = data_args.task
     elif data_args.language is not None:
