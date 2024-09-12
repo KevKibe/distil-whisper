@@ -1758,7 +1758,7 @@ def main():
                         feature_extractor.save_pretrained(intermediate_dir)
                         tokenizer.save_pretrained(intermediate_dir)
                         config.save_pretrained(intermediate_dir)
-                        student_model.generation_config.save_pretrained(intermediate_dir)
+                        student_model.module.generation_config.save_pretrained(intermediate_dir)
 
                         accelerator.wait_for_everyone()
 
