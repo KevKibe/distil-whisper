@@ -565,7 +565,7 @@ def main():
     if torch.cuda.device_count() > 1:
         print(f"Using {torch.cuda.device_count()} GPUs")
         model = DataParallel(model)
-    model.to("cuda:0", dtype=dtype)
+    model.to("cuda", dtype=dtype)
 
     model_pipeline = None
     if data_args.use_pipeline:
