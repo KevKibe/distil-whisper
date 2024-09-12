@@ -741,7 +741,7 @@ def main():
 
             set_seed(data_args.seed)
             start_time = time.time()
-            output_ids = model.generate(inputs, attention_mask=attention_mask, **batch_gen_kwargs)
+            output_ids = model.module.generate(inputs, attention_mask=attention_mask, **batch_gen_kwargs)
             gen_time = time.time() - start_time
 
             batch["time"] = inner_batch_size * [(gen_time) / inner_batch_size]
