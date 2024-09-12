@@ -1788,7 +1788,7 @@ def main():
                     tokenizer.save_pretrained(final_weights_dir)
                     # save the config and generation config as well
                     config.save_pretrained(final_weights_dir)
-                    student_model.generation_config.save_pretrained(final_weights_dir)
+                    student_model.module.generation_config.save_pretrained(final_weights_dir)
 
                     # un-wrap student model for save
                     student_model = accelerator.unwrap_model(student_model)
