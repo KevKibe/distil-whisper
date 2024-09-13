@@ -47,8 +47,7 @@ from transformers.models.whisper.modeling_whisper import WhisperForCausalLM
 from transformers.models.whisper.tokenization_whisper import TO_LANGUAGE_CODE
 from transformers.utils import check_min_version, is_accelerate_available
 from transformers.utils.versions import require_version
-from torch.nn import DataParallel
-
+import torch.nn as nn
 
 # Will error if the minimal version of Transformers is not installed. Remove at your own risks.
 check_min_version("4.34.0.dev0")
@@ -564,7 +563,7 @@ def main():
     )
     if torch.cuda.device_count() > 1:
         print(f"Using {torch.cuda.device_count()} GPUs")
-        model = DataParallel(model)
+        model = nn.DataParallel(model)
     model.to("cuda", dtype=dtype)
 
     model_pipeline = None
