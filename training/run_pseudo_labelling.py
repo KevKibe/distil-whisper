@@ -508,6 +508,7 @@ def main():
                 token=token,
                 streaming=data_args.streaming,
                 num_proc=data_args.preprocessing_num_workers if not data_args.streaming else None,
+                trust_remote_code=True
             )
 
     if data_args.audio_column_name not in next(iter(raw_datasets.values())).column_names:
