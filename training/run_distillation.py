@@ -1648,6 +1648,7 @@ def main():
                         rotate_checkpoints(training_args.save_total_limit, output_dir=training_args.output_dir)
 
                         if training_args.push_to_hub:
+                            repo_name = training_args.hub_model_id
                             upload_folder(
                                 folder_path=training_args.output_dir,
                                 repo_id=repo_name,
@@ -1769,6 +1770,7 @@ def main():
                             accelerator.unwrap_model(student_model).save_pretrained(training_args.output_dir)
 
                             if training_args.push_to_hub:
+                                repo_name = training_args.hub_model_id
                                 upload_folder(
                                     folder_path=training_args.output_dir,
                                     repo_id=repo_name,
@@ -1795,6 +1797,7 @@ def main():
                     student_model.save_pretrained(final_weights_dir)
 
                     if training_args.push_to_hub:
+                        repo_name = training_args.hub_model_id
                         upload_folder(
                             folder_path=training_args.output_dir,
                             repo_id=repo_name,
