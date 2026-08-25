@@ -133,7 +133,7 @@ class ModelArguments:
                 "Which attention implementation to use in the encoder and decoder attention layers. Can be one of:\n"
                 "1. `eager` or `None`: default Transformers attention implementation.\n"
                 "2. `sdpa`: Flash Attention through PyTorch SDPA. Requires `torch>=2.1`. Recommended for hardware where Flash Attention 2 is not supported, e.g. Turing GPUs, (T4, RTX 2080).\n"
-                "3. `flash_attn_2`: Flash Attention 2 through the Flash Attention package https://github.com/Dao-AILab/flash-attention. **Always** recommended on supported hardware (Ampere, Ada, or Hopper GPUs, e.g., A100, RTX 3090, RTX 4090, H100)."
+                "3. `flash_attention_2`: Flash Attention 2 through the Flash Attention package https://github.com/Dao-AILab/flash-attention. **Always** recommended on supported hardware (Ampere, Ada, or Hopper GPUs, e.g., A100, RTX 3090, RTX 4090, H100)."
             )
         },
     )
@@ -144,7 +144,7 @@ class ModelArguments:
                 f"Got `--attn_implementation={self.attn_implementation}`, which is an invalid attention type. Should be one of:\n"
                 "1. `eager` or `None`: default Transformers attention implementation.\n"
                 "2. `sdpa`: Flash Attention through PyTorch SDPA. Requires `torch>=2.1`. Recommended for hardware where Flash Attention 2 is not supported, e.g. Turing GPUs, (T4, RTX 2080).\n"
-                "3. `flash_attn_2`: Flash Attention 2 through the Flash Attention package https://github.com/Dao-AILab/flash-attention. **Always** recommended on supported hardware (Ampere, Ada, or Hopper GPUs, e.g., A100, RTX 3090, RTX 4090, H100)."
+                "3. `flash_attention_2`: Flash Attention 2 through the Flash Attention package https://github.com/Dao-AILab/flash-attention. **Always** recommended on supported hardware (Ampere, Ada, or Hopper GPUs, e.g., A100, RTX 3090, RTX 4090, H100)."
             )
 
 
@@ -719,7 +719,7 @@ def sorted_best_checkpoints(output_dir=None, checkpoint_prefix="checkpoint"):
     for path in glob_checkpoints:
         regex_match = re.search(r"val-wer-([0-9]+\.[0-9]+)", path)
         if regex_match is not None and regex_match.groups() is not None:
-            ordering_and_checkpoint_path.append((regex_match.groups(1), path))
+            ordering_and_checkpoint_path.append((float(regex_match.groups(1)[0]), path))
 
     checkpoints_sorted = sorted(ordering_and_checkpoint_path, reverse=True)
     checkpoints_sorted = [checkpoint[1] for checkpoint in checkpoints_sorted]
@@ -1213,13 +1213,13 @@ def main():
                 # check that the length of the prompt does not exceed more than half the max label length (224)
                 if len(prev_ids) > prompt_cutoff_length:
                     prev_ids = prev_ids[-prompt_cutoff_length + 1 :]
-                    prev_ids = [decoder_prev_token_id] + prev_ids
 
                 # and that the total length of the labels does not exceed the max label length (448)
-                if len(prev_ids + token_ids) > max_label_length:
-                    trim_length = len(prev_ids + token_ids) - max_label_length + 1
+                if len(prev_ids + token_ids) + 1 > max_label_length:
+                    trim_length = len(token_ids) - max_label_length + 1
                     prev_ids = prev_ids[trim_length:]
-                    prev_ids = [decoder_prev_token_id] + prev_ids
+
+                prev_ids = [decoder_prev_token_id] + prev_ids
 
                 token_ids = prev_ids + token_ids
 
